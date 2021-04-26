@@ -4,7 +4,7 @@ import { Action, Docker, Input, ImageTag, Output, ResultsCheck } from './model';
 async function action() {
   Action.checkCompatibility();
 
-  const { dockerfile, workspace, actionFolder } = Action;
+  const { dockerfile, workspace, sshAgent, actionFolder } = Action;
   const {
     unityVersion,
     customImage,
@@ -25,6 +25,7 @@ async function action() {
     // Run docker image
     await Docker.run(actionImage, {
       workspace,
+      sshAgent,
       unityVersion,
       projectPath,
       testMode,

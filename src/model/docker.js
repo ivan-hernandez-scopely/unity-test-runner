@@ -42,7 +42,6 @@ class Docker {
         --env TEST_MODE="${testMode}" \
         --env ARTIFACTS_PATH="${artifactsPath}" \
         --env CUSTOM_PARAMETERS="${customParameters}" \
-        --env HOME=/github/home \
         --env GITHUB_REF \
         --env GITHUB_SHA \
         --env GITHUB_REPOSITORY \
@@ -59,9 +58,10 @@ class Docker {
         --env RUNNER_TEMP \
         --env RUNNER_WORKSPACE \
         --volume "/var/run/docker.sock":"/var/run/docker.sock" \
-        --volume "/home/runner/work/_temp/_github_home":"/github/home" \
+        --volume "/home/runner/work/_temp/_github_home":"/root" \
         --volume "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
         --volume "${workspace}":"/github/workspace" \
+        --volume ~/.ssh:/root/.ssh \
         ${useHostNetwork ? '--net=host' : ''} \
         ${githubToken ? '--env USE_EXIT_CODE=false' : '--env USE_EXIT_CODE=true'} \
         ${image}`;

@@ -62,7 +62,6 @@ class Docker {
         --volume "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
         --volume "${workspace}":"/github/workspace" \
         --volume "/home/runner/.ssh":"/root/.ssh" \
-        --volume "$(pwd):/$(pwd)" \
         ${useHostNetwork ? '--net=host' : ''} \
         ${githubToken ? '--env USE_EXIT_CODE=false' : '--env USE_EXIT_CODE=true'} \
         ${image} /bin/bash -c "apt-get update && apt-get --assume-yes install ssh"`;

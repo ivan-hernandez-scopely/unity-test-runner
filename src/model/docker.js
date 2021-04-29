@@ -21,13 +21,13 @@ class Docker {
     const {
       unityVersion,
       workspace,
-      sshAgent,
       projectPath,
       testMode,
       artifactsPath,
       useHostNetwork,
       customParameters,
       githubToken,
+      sshAgent,
     } = parameters;
 
     const command = `docker run \
@@ -58,16 +58,16 @@ class Docker {
         --env RUNNER_TOOL_CACHE \
         --env RUNNER_TEMP \
         --env RUNNER_WORKSPACE \
+        --env SSH_AUTH_SOCK=/ssh-agent \
         --volume "/var/run/docker.sock":"/var/run/docker.sock" \
         --volume "/home/runner/work/_temp/_github_home":"/root" \
         --volume "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
         --volume "${workspace}":"/github/workspace" \
-        ${sshAgent ? '--volume "${sshAgent}":"/ssh-agent"' : ''} \
-        ${sshAgent ? '--volume /home/runner/.ssh/known_hosts:/root/.ssh/known_hosts' : ''} \
-        ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
+        --volume "${sshAgent}":"/ssh-agent" \
+        --volume /home/runner/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
         ${useHostNetwork ? '--net=host' : ''} \
         ${githubToken ? '--env USE_EXIT_CODE=false' : '--env USE_EXIT_CODE=true'} \
-        ${image} /bin/bash -c "apt-get update && apt-get --assume-yes install ssh; ssh-add -l && ssh -T git@github.com"`;
+        ${image}`;
 
     await exec(command, undefined, { silent });
   }
